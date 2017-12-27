@@ -50,10 +50,49 @@
 
     <!-- Page Content -->
     <div class="container">
-
       <h1 class="my-4 text-center text-lg-left">Edspirational Grade Calculator</h1>
+      <div class="row">
+        <div class="col">
+          <h3>Grade</h3>
+          <form id="gradesForm" action="/action_page.php">
+            <input type="text" name="grade1">%<br><br>
+            <input type="text" name="grade2">%<br><br>
+            <input type="text" name="grade3">%<br><br>
+            <input type="text" name="grade4">%<br><br>
+            <input type="text" name="grade5">%<br><br>
+            <input type="text" name="grade6">%<br><br>
+            <input type="text" name="grade7">%<br><br>
+            <input type="text" name="grade8">%<br><br>
+            <input type="text" name="grade9">%<br><br>
+            <input type="text" name="grade10">%<br><br>
+          </form>
+        </div>
+        <div class="col">
+          <h3>Weight</h3>
+          <form id="weightForm" action="/action_page.php">
+            <input type="text" name="weight1">%<br><br>
+            <input type="text" name="weight2">%<br><br>
+            <input type="text" name="weight3">%<br><br>
+            <input type="text" name="weight4">%<br><br>
+            <input type="text" name="weight5">%<br><br>
+            <input type="text" name="weight6">%<br><br>
+            <input type="text" name="weight7">%<br><br>
+            <input type="text" name="weight8">%<br><br>
+            <input type="text" name="weight9">%<br><br>
+            <input type="text" name="weight10">%<br><br><br>
+          </form>
+        </div>
+      </div>
 
-
+      <div class="row">
+        <form id="weightForm" action="/action_page.php">
+          What is the average grade necessary, on the rest of my assignments, to
+          receive a final grade of <input type="text" name="avgGrade">%?<br><br>
+          What will my final grade be if, for the rest of my assignments, I score
+          <input type="text" name="avgRemain">%?<br><br>
+          <input type="submit" value="Calculate">
+        </form>
+      </div>
     </div>
     <!-- /.container -->
 
