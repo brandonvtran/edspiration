@@ -52,46 +52,65 @@
     <div class="container">
       <h1 class="my-4 text-center text-lg-left">Edspirational Grade Calculator</h1>
       <div class="row">
+        <!-- grade received for each assignment-->
         <div class="col">
           <h3>Grade</h3>
           <form id="gradesForm" action="/action_page.php">
-            <input type="text" name="grade1">%<br><br>
-            <input type="text" name="grade2">%<br><br>
-            <input type="text" name="grade3">%<br><br>
-            <input type="text" name="grade4">%<br><br>
-            <input type="text" name="grade5">%<br><br>
-            <input type="text" name="grade6">%<br><br>
-            <input type="text" name="grade7">%<br><br>
-            <input type="text" name="grade8">%<br><br>
-            <input type="text" name="grade9">%<br><br>
-            <input type="text" name="grade10">%<br><br>
+            <input type="text" id="grade1">%<br><br>
+            <input type="text" id="grade2">%<br><br>
+            <input type="text" id="grade3">%<br><br>
+            <input type="text" id="grade4">%<br><br>
+            <input type="text" id="grade5">%<br><br>
+            <input type="text" id="grade6">%<br><br>
+            <input type="text" id="grade7">%<br><br>
+            <input type="text" id="grade8">%<br><br>
+            <input type="text" id="grade9">%<br><br>
+            <input type="text" id="grade10">%<br><br>
           </form>
         </div>
+
+        <!-- weight percentage of each grade -->
         <div class="col">
           <h3>Weight</h3>
           <form id="weightForm" action="/action_page.php">
-            <input type="text" name="weight1">%<br><br>
-            <input type="text" name="weight2">%<br><br>
-            <input type="text" name="weight3">%<br><br>
-            <input type="text" name="weight4">%<br><br>
-            <input type="text" name="weight5">%<br><br>
-            <input type="text" name="weight6">%<br><br>
-            <input type="text" name="weight7">%<br><br>
-            <input type="text" name="weight8">%<br><br>
-            <input type="text" name="weight9">%<br><br>
-            <input type="text" name="weight10">%<br><br><br>
+            <input type="text" id="weight1">%<br><br>
+            <input type="text" id="weight2">%<br><br>
+            <input type="text" id="weight3">%<br><br>
+            <input type="text" id="weight4">%<br><br>
+            <input type="text" id="weight5">%<br><br>
+            <input type="text" id="weight6">%<br><br>
+            <input type="text" id="weight7">%<br><br>
+            <input type="text" id="weight8">%<br><br>
+            <input type="text" id="weight9">%<br><br>
+            <input type="text" id="weight10">%<br><br><br>
           </form>
         </div>
       </div>
 
+      <!-- calculate grade options -->
       <div class="row">
         <form id="weightForm" action="/action_page.php">
           What is the average grade necessary, on the rest of my assignments, to
-          receive a final grade of <input type="text" name="avgGrade">%?<br><br>
+          receive a final grade of <input type="text" id="avgGrade">%?<br><br>
           What will my final grade be if, for the rest of my assignments, I score
-          <input type="text" name="avgRemain">%?<br><br>
-          <input type="submit" value="Calculate">
+          <input type="text" id="avgRemain">%?<br><br>
         </form>
+      </div>
+
+      <!-- calculate button calls functions in javascript to execute calculation-->
+      <div class="row">
+          <button onclick="calculateCurrentGrade(); calculateAvgGrade(); calculateAvgRemain();">Calculate</button>
+      </div>
+
+      <!-- calculated grade-->
+      <div class="row">
+        <p id="currentGrade"></p>
+      </div>
+      <div class="row">
+        <p id="calcAvgGrade"></p>
+      </div>
+      <div class="row">
+        <p id="calcAvgRemain"></p>
       </div>
     </div>
     <!-- /.container -->
@@ -103,6 +122,131 @@
       </div>
       <!-- /.container -->
     </footer>
+
+    <script>
+      //calculate current grade out of total weighted so far
+      function calculateCurrentGrade() {
+        var numForms = 10;
+        var currentGrade = 0;
+        var totalWeight = 0;
+
+        //calculate total weight to get final grade based on weight of grades so far
+        for (var w = 1; w < numForms + 1; w++){
+          var grade = document.getElementById("grade" + w).value;
+          var weight = document.getElementById("weight" + w).value;
+
+          if (weight == "" || weight == null) {
+            totalWeight = parseFloat(totalWeight) + 0;
+          }
+          else {
+            totalWeight = parseFloat(totalWeight) + parseFloat(weight);
+          }
+        }
+
+        //calculate the current grade -- weight is a fraction of the total weight
+        //example: grade of 100% & 90% with weight of 10% each should be 95% and not 19%
+        for (var i = 1; i < numForms + 1; i++) {
+          var grade = document.getElementById("grade" + i).value;
+          var weight = document.getElementById("weight" + i).value/totalWeight;
+
+          currentGrade = (currentGrade + (grade*weight));
+        }
+
+        if (currentGrade != "" && currentGrade != null && !isNaN(currentGrade)) {
+          document.getElementById("currentGrade").innerHTML = "Your current grade is: <b>" + currentGrade + "%</b>";
+        }
+        else {
+          document.getElementById("currentGrade").innerHTML = "There is no data";
+        }
+      }
+
+      //calculate what you will need for the rest of your grade to receive a certain score
+      function calculateAvgGrade() {
+        var numForms = 10;
+        var calcGrade = 0;
+        var totalWeight = 0;
+        var weightRemain;
+        var currentGrade = 0;
+        var avgGrade = document.getElementById("avgGrade").value;
+
+        //find the weight that hasn't been calculated with yet
+        for (var w = 1; w < numForms + 1; w++){
+          var grade = document.getElementById("grade" + w).value;
+          var weight = document.getElementById("weight" + w).value;
+
+          if (weight == "" || weight == null) {
+            totalWeight = parseFloat(totalWeight) + 0;
+          }
+          else {
+            totalWeight = parseFloat(totalWeight) + parseFloat(weight);
+          }
+        }
+        weightRemain = 100 - totalWeight;
+
+        //calculate the current grade so far
+        for (var i = 1; i < numForms + 1; i++) {
+          var grade = document.getElementById("grade" + i).value;
+          var weight = document.getElementById("weight" + i).value;
+
+          currentGrade = (currentGrade + (grade*weight));
+        }
+
+        currentGrade = currentGrade/100;
+
+        //calculate the grade needed to receive a certain score
+        calcGrade = ((parseFloat(avgGrade) - parseFloat(currentGrade))/parseFloat(weightRemain))*100;
+
+        if (calcGrade != "" && calcGrade != null && !isNaN(calcGrade)) {
+          document.getElementById("calcAvgGrade").innerHTML = "You will need a score of <b>" + calcGrade + "%</b> to receive a final grade of " + avgGrade + "% for the remaining " + weightRemain + "% of your grade";
+        }
+        else {
+          document.getElementById("calcAvgGrade").innerHTML = "";
+        }
+      }
+
+      //calculate what your grade will be if you get a certain score for the rest of your grade
+      function calculateAvgRemain() {
+        var numForms = 10;
+        var calcRemain = 0;
+        var totalWeight = 0;
+        var weightRemain;
+        var currentGrade = 0;
+        var avgRemain = document.getElementById("avgRemain").value;
+
+        //find the weight that hasn't been calculated with yet
+        for (var w = 1; w < numForms + 1; w++){
+          var grade = document.getElementById("grade" + w).value;
+          var weight = document.getElementById("weight" + w).value;
+
+          if (weight == "" || weight == null) {
+            totalWeight = parseFloat(totalWeight) + 0;
+          }
+          else {
+            totalWeight = parseFloat(totalWeight) + parseFloat(weight);
+          }
+        }
+        weightRemain = 100 - totalWeight;
+
+        //calculate the current grade out of 100%
+        for (var i = 1; i < numForms + 1; i++) {
+          var grade = document.getElementById("grade" + i).value;
+          var weight = document.getElementById("weight" + i).value;
+
+          currentGrade = (currentGrade + (grade*weight));
+        }
+        currentGrade = currentGrade/100;
+
+        //calculate the grade you will receive based on the inputted score
+        calcRemain = parseFloat(currentGrade) + ((parseFloat(avgRemain)*parseFloat(weightRemain))/100);
+
+        if (calcRemain != "" && calcRemain != null && !isNaN(calcRemain)) {
+          document.getElementById("calcAvgRemain").innerHTML = "Your final grade will be <b>" + calcRemain + "%</b> if you score " + avgRemain + "% on the remaining " + weightRemain + "% of your grade";
+        }
+        else {
+          document.getElementById("calcAvgRemain").innerHTML = "";
+        }
+      }
+    </script>
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
